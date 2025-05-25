@@ -113,6 +113,7 @@ const Dashboard = () => {
                       className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg"
                     >
                       <div className="flex-1">
+
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="font-medium text-white">
                             {analysis.params.task}
@@ -127,6 +128,42 @@ const Dashboard = () => {
                         <p className="text-sm text-gray-400">
                           {analysis.result.slice(0, 80)}...
                         </p>
+
+                        <h3 className="font-medium text-white mb-1">
+                          {analysis.params.task}
+                        </h3>
+                        <p className="text-sm text-gray-400 mb-2">
+
+                          {analysis.params.type}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span>Каналов: {analysis.params.channels.length}</span>
+                          <span>Дата: {analysis.date}</span>
+                        </div>
+                        <p className="mt-2 text-gray-400 text-sm line-clamp-2">
+                          {analysis.result}
+                        </p>
+
+
+                          {analysis.result.slice(0, 80)}{analysis.result.length > 80 ? '…' : ''}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span>Каналов: {analysis.params.channels.length}</span>
+                          <span>Дата: {analysis.date.split('T')[0]}</span>
+                        </div>
+
+                          {analysis.params.type}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
+                          <span>Каналов: {analysis.params.channels.length}</span>
+                          <span>Дата: {new Date(analysis.date).toLocaleDateString()}</span>
+                        </div>
+                        <p className="text-gray-300 text-sm line-clamp-2">
+                          {analysis.result}
+                        </p>
+
+
+
                       </div>
                       <Button size="sm" variant="outline" className="text-white border-gray-600">
                         <Eye className="mr-2 h-4 w-4" />
