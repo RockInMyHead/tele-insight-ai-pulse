@@ -50,10 +50,7 @@ const Dashboard = () => {
               <BarChart className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">12</div>
-              <p className="text-xs text-gray-400">
-                +3 за последний месяц
-              </p>
+              <div className="text-2xl font-bold text-white">{analyses.length}</div>
             </CardContent>
           </Card>
 
@@ -116,6 +113,22 @@ const Dashboard = () => {
                       className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg"
                     >
                       <div className="flex-1">
+
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-medium text-white">
+                            {analysis.params.task}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
+                          <span>Каналов: {analysis.params.channels.length}</span>
+                          <span>
+                            Дата: {new Date(analysis.date).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-400">
+                          {analysis.result.slice(0, 80)}...
+                        </p>
+
                         <h3 className="font-medium text-white mb-1">
                           {analysis.params.task}
                         </h3>
@@ -148,6 +161,7 @@ const Dashboard = () => {
                         <p className="text-gray-300 text-sm line-clamp-2">
                           {analysis.result}
                         </p>
+
 
 
                       </div>
