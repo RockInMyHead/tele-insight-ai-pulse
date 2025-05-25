@@ -1,4 +1,7 @@
+
 import OpenAI from 'openai';
+=======
+import { Configuration, OpenAIApi } from 'openai';
 
 export interface AnalysisParams {
   channels: string[];
@@ -18,7 +21,12 @@ const HISTORY_KEY = 'tiap_analysis_history';
 function getApi() {
   const apiKey = import.meta.env.VITE_OPENAI_KEY;
   if (!apiKey) throw new Error('OPENAI key is missing');
+
   return new OpenAI({ apiKey });
+
+  const config = new Configuration({ apiKey });
+  return new OpenAIApi(config);
+
 }
 
 function getHistory(): AnalysisResult[] {
@@ -33,11 +41,19 @@ function saveHistory(history: AnalysisResult[]) {
 export async function startAnalysis(params: AnalysisParams): Promise<AnalysisResult> {
   const api = getApi();
   const prompt = `Анализ Telegram каналов ${params.channels.join(', ')}. Задача: ${params.task}`;
+
   const resp = await api.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages: [{ role: 'user', content: prompt }],
   });
   const content = resp.choices[0]?.message?.content || '';
+
+  const resp = await api.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [{ role: 'user', content: prompt }],
+  });
+  const content = resp.data.choices[0]?.message?.content || '';
+
   const res: AnalysisResult = {
     id: crypto.randomUUID(),
     params,
