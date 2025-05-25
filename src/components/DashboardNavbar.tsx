@@ -1,12 +1,14 @@
 
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '@/lib/auth';
 import { LogOut, User, Settings } from 'lucide-react';
 
 const DashboardNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    logout();
     navigate('/');
   };
 

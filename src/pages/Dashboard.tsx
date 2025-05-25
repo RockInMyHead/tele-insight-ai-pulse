@@ -1,47 +1,22 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useNavigate } from 'react-router-dom';
 import { DollarSign, TrendingUp, Users, BarChart, Plus, Eye } from 'lucide-react';
 import DashboardNavbar from '@/components/DashboardNavbar';
+import { listAnalyses, AnalysisResult } from '@/lib/telegramAnalysis';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [budget] = useState(1500);
   const [used] = useState(450);
+  const [analyses, setAnalyses] = useState<AnalysisResult[]>([]);
 
-  const analyses = [
-    {
-      id: 1,
-      name: "Анализ IT каналов",
-      type: "Поиск лидов",
-      status: "Завершен",
-      date: "15.12.2024",
-      channels: 25,
-      leads: 142
-    },
-    {
-      id: 2,
-      name: "Маркетинг криптовалют",
-      type: "Маркетинговый анализ",
-      status: "В процессе",
-      date: "18.12.2024",
-      channels: 18,
-      progress: 65
-    },
-    {
-      id: 3,
-      name: "Каналы для рекламы e-commerce",
-      type: "Выбор каналов для рекламы",
-      status: "Завершен",
-      date: "12.12.2024",
-      channels: 42,
-      recommendations: 8
-    }
-  ];
+  useEffect(() => {
+    setAnalyses(listAnalyses());
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -132,28 +107,23 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                  {analyses.length === 0 && (
+                    <p className="text-gray-400">Нет сохраненных анализов</p>
+                  )}
                   {analyses.map((analysis) => (
                     <div key={analysis.id} className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-medium text-white">{analysis.name}</h3>
-                          <Badge 
-                            variant={analysis.status === 'Завершен' ? 'default' : 'secondary'}
-                            className={analysis.status === 'Завершен' ? 'bg-green-600' : 'bg-orange-600'}
-                          >
-                            {analysis.status}
-                          </Badge>
+                          <h3 className="font-medium text-white">{analysis.params.task}</h3>
                         </div>
-                        <p className="text-sm text-gray-400 mb-2">{analysis.type}</p>
+                        <p className="text-sm text-gray-400 mb-2">{analysis.params.type}</p>
                         <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <span>Каналов: {analysis.channels}</span>
-                          <span>Дата: {analysis.date}</span>
-                          {analysis.leads && <span>Лиды: {analysis.leads}</span>}
-                          {analysis.recommendations && <span>Рекомендации: {analysis.recommendations}</span>}
+                          <span>Каналов: {analysis.params.channels.length}</span>
+                          <span>Дата: {new Date(analysis.date).toLocaleDateString()}</span>
                         </div>
-                        {analysis.progress && (
-                          <Progress value={analysis.progress} className="mt-2 w-32" />
-                        )}
+                        <p className="text-gray-400 mt-2 text-sm">
+                          {analysis.result.slice(0, 80)}...
+                        </p>
                       </div>
                       <Button size="sm" variant="outline" className="text-white border-gray-600">
                         <Eye className="mr-2 h-4 w-4" />
