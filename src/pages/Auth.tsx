@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { register, login } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,10 +15,18 @@ const Auth = () => {
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Здесь будет логика аутентификации
-    navigate('/dashboard');
+    try {
+      if (isLogin) {
+        await login(email, password);
+      } else {
+        await register(name, email, password);
+      }
+      navigate('/dashboard');
+    } catch (err) {
+      alert((err as Error).message);
+    }
   };
 
   return (

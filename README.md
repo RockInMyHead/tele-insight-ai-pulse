@@ -64,6 +64,10 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/1adf9438-a94f-427a-a055-b2f31351c50c) and click on Share -> Publish.
 
+## Environment variables
+
+Create a `.env` file based on `.env.example` and provide your OpenAI API key to enable Telegram channel analysis.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
