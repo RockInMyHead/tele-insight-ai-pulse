@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Search, Target, TrendingUp, User } from 'lucide-react';
 import DashboardNavbar from '@/components/DashboardNavbar';
+import { startAnalysis } from '@/lib/telegramAnalysis';
 
 const AnalysisSetup = () => {
   const navigate = useNavigate();
@@ -57,15 +58,17 @@ const AnalysisSetup = () => {
     }
   };
 
-  const handleStart = () => {
-    // Здесь будет логика запуска анализа
-    console.log('Запуск анализа с параметрами:', {
-      channelMethod,
-      channels,
-      analysisType,
-      customTask
-    });
-    navigate('/dashboard');
+  const handleStart = async () => {
+    try {
+      await startAnalysis({
+        channels: channels.split('\n').map((c) => c.trim()).filter(Boolean),
+        task: analysisType === 'custom' ? customTask : analysisType,
+        type: analysisType,
+      });
+      navigate('/dashboard');
+    } catch (err) {
+      alert((err as Error).message);
+    }
   };
 
   return (
