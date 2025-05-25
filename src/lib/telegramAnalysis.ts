@@ -1,7 +1,11 @@
 
 import OpenAI from 'openai';
-=======
+
+
+import OpenAI from 'openai';
+
 import { Configuration, OpenAIApi } from 'openai';
+
 
 export interface AnalysisParams {
   channels: string[];
@@ -24,8 +28,11 @@ function getApi() {
 
   return new OpenAI({ apiKey });
 
+  return new OpenAI({ apiKey });
+
   const config = new Configuration({ apiKey });
   return new OpenAIApi(config);
+
 
 }
 
@@ -53,6 +60,7 @@ export async function startAnalysis(params: AnalysisParams): Promise<AnalysisRes
     messages: [{ role: 'user', content: prompt }],
   });
   const content = resp.data.choices[0]?.message?.content || '';
+
 
   const res: AnalysisResult = {
     id: crypto.randomUUID(),
